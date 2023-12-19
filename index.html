@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        canvas {
+            display: block;
+            margin: 20px auto;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="myCanvas" width="600" height="400"></canvas>
+
+    <script>
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let branchLength = 60;
+        let angle = -Math.PI / 2;
+
+        function drawTree(x, y, branchLength, angle, depth) {
+            if (depth === 0) return;
+
+            const newX = x + branchLength * Math.cos(angle);
+            const newY = y + branchLength * Math.sin(angle);
+
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(newX, newY);
+            ctx.strokeStyle = '#8B4513';
+            ctx.lineWidth = depth / 2;
+            ctx.stroke();
+            ctx.closePath();
+
+            drawTree(newX, newY, branchLength * 0.7, angle - 0.3, depth - 1);
+            drawTree(newX, newY, branchLength * 0.7, angle + 0.3, depth - 1);
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawTree(canvas.width / 2, canvas.height, branchLength, angle, 10);
+            branchLength += 0.2;
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+
+</html>
